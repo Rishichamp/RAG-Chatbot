@@ -1,0 +1,17 @@
+langchain==0.3.25
+langchain-community==0.3.24
+langchain-google-genai==2.1.4
+langchain-text-splitters==0.3.11
+faiss-cpu==1.13.2
+openai==1.58.1
+tiktoken==0.8.0
+rank-bm25==0.2.2
+pypdf==4.3.1
+python-docx==1.1.2
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+python-multipart==0.0.12
+python-dotenv==1.0.1
+pydantic==2.9.0
+numpy==2.2.6
+fpdf2==2.7.9

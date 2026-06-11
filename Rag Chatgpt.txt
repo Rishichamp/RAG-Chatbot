@@ -1,0 +1,462 @@
+Rag Chatgpt
+
+(venv) PS R:\Projects\rag_chatbot> python -c "
+>> import os
+>> for root, dirs, files in os.walk('venv/Lib/site-packages'):
+>>     for f in files:
+>>         if f.endswith('.py'):
+>>             path = os.path.join(root, f)
+>>             try:
+>>                 content = open(path, encoding='utf-8', errors='ignore').read()
+>>                 if 'class EnsembleRetriever' in content:
+>>                     print(path)
+>>             except:
+>>                 pass
+>> "
+venv/Lib/site-packages\langchain\retrievers\ensemble.py
+
+(venv) PS R:\Projects\rag_chatbot> pip install langchain-core==0.3.58 --force-reinstall
+Collecting langchain-core==0.3.58
+  Using cached langchain_core-0.3.58-py3-none-any.whl.metadata (5.9 kB)
+Collecting langsmith<0.4,>=0.1.125 (from langchain-core==0.3.58)
+  Using cached langsmith-0.3.45-py3-none-any.whl.metadata (15 kB)
+Collecting tenacity!=8.4.0,<10.0.0,>=8.1.0 (from langchain-core==0.3.58)
+  Using cached tenacity-9.1.4-py3-none-any.whl.metadata (1.2 kB)
+Collecting jsonpatch<2.0,>=1.33 (from langchain-core==0.3.58)
+  Using cached jsonpatch-1.33-py2.py3-none-any.whl.metadata (3.0 kB)
+Collecting PyYAML>=5.3 (from langchain-core==0.3.58)
+  Using cached pyyaml-6.0.3-cp313-cp313-win_amd64.whl.metadata (2.4 kB)
+Collecting packaging<25,>=23.2 (from langchain-core==0.3.58)
+  Using cached packaging-24.2-py3-none-any.whl.metadata (3.2 kB)
+Collecting typing-extensions>=4.7 (from langchain-core==0.3.58)
+  Using cached typing_extensions-4.15.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting pydantic<3.0.0,>=2.7.4 (from langchain-core==0.3.58)
+  Downloading pydantic-2.13.4-py3-none-any.whl.metadata (109 kB)
+Collecting jsonpointer>=1.9 (from jsonpatch<2.0,>=1.33->langchain-core==0.3.58)
+  Using cached jsonpointer-3.1.1-py3-none-any.whl.metadata (2.4 kB)
+Collecting httpx<1,>=0.23.0 (from langsmith<0.4,>=0.1.125->langchain-core==0.3.58)
+  Using cached httpx-0.28.1-py3-none-any.whl.metadata (7.1 kB)
+Collecting orjson<4.0.0,>=3.9.14 (from langsmith<0.4,>=0.1.125->langchain-core==0.3.58)
+  Using cached orjson-3.11.9-cp313-cp313-win_amd64.whl.metadata (43 kB)
+Collecting requests<3,>=2 (from langsmith<0.4,>=0.1.125->langchain-core==0.3.58)
+  Using cached requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting requests-toolbelt<2.0.0,>=1.0.0 (from langsmith<0.4,>=0.1.125->langchain-core==0.3.58)
+  Using cached requests_toolbelt-1.0.0-py2.py3-none-any.whl.metadata (14 kB)
+Collecting zstandard<0.24.0,>=0.23.0 (from langsmith<0.4,>=0.1.125->langchain-core==0.3.58)
+  Using cached zstandard-0.23.0-cp313-cp313-win_amd64.whl.metadata (3.0 kB)
+Collecting anyio (from httpx<1,>=0.23.0->langsmith<0.4,>=0.1.125->langchain-core==0.3.58)
+  Using cached anyio-4.13.0-py3-none-any.whl.metadata (4.5 kB)
+Collecting certifi (from httpx<1,>=0.23.0->langsmith<0.4,>=0.1.125->langchain-core==0.3.58)
+  Using cached certifi-2026.5.20-py3-none-any.whl.metadata (2.5 kB)
+Collecting httpcore==1.* (from httpx<1,>=0.23.0->langsmith<0.4,>=0.1.125->langchain-core==0.3.58)
+  Using cached httpcore-1.0.9-py3-none-any.whl.metadata (21 kB)
+Collecting idna (from httpx<1,>=0.23.0->langsmith<0.4,>=0.1.125->langchain-core==0.3.58)
+  Downloading idna-3.17-py3-none-any.whl.metadata (6.4 kB)
+Collecting h11>=0.16 (from httpcore==1.*->httpx<1,>=0.23.0->langsmith<0.4,>=0.1.125->langchain-core==0.3.58)
+  Using cached h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting annotated-types>=0.6.0 (from pydantic<3.0.0,>=2.7.4->langchain-core==0.3.58)
+  Using cached annotated_types-0.7.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.46.4 (from pydantic<3.0.0,>=2.7.4->langchain-core==0.3.58)
+  Downloading pydantic_core-2.46.4-cp313-cp313-win_amd64.whl.metadata (6.7 kB)
+Collecting typing-inspection>=0.4.2 (from pydantic<3.0.0,>=2.7.4->langchain-core==0.3.58)
+  Using cached typing_inspection-0.4.2-py3-none-any.whl.metadata (2.6 kB)
+Collecting charset_normalizer<4,>=2 (from requests<3,>=2->langsmith<0.4,>=0.1.125->langchain-core==0.3.58)
+  Using cached charset_normalizer-3.4.7-cp313-cp313-win_amd64.whl.metadata (41 kB)
+Collecting urllib3<3,>=1.26 (from requests<3,>=2->langsmith<0.4,>=0.1.125->langchain-core==0.3.58)
+  Using cached urllib3-2.7.0-py3-none-any.whl.metadata (6.9 kB)
+Downloading langchain_core-0.3.58-py3-none-any.whl (437 kB)
+Using cached jsonpatch-1.33-py2.py3-none-any.whl (12 kB)
+Using cached langsmith-0.3.45-py3-none-any.whl (363 kB)
+Using cached httpx-0.28.1-py3-none-any.whl (73 kB)
+Using cached httpcore-1.0.9-py3-none-any.whl (78 kB)
+Using cached orjson-3.11.9-cp313-cp313-win_amd64.whl (127 kB)
+Downloading packaging-24.2-py3-none-any.whl (65 kB)
+Downloading pydantic-2.13.4-py3-none-any.whl (472 kB)
+Downloading pydantic_core-2.46.4-cp313-cp313-win_amd64.whl (2.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 7.9 MB/s eta 0:00:00
+Using cached requests-2.34.2-py3-none-any.whl (73 kB)
+Using cached charset_normalizer-3.4.7-cp313-cp313-win_amd64.whl (158 kB)
+Downloading idna-3.17-py3-none-any.whl (65 kB)
+Using cached requests_toolbelt-1.0.0-py2.py3-none-any.whl (54 kB)
+Using cached tenacity-9.1.4-py3-none-any.whl (28 kB)
+Using cached urllib3-2.7.0-py3-none-any.whl (131 kB)
+Using cached zstandard-0.23.0-cp313-cp313-win_amd64.whl (495 kB)
+Using cached annotated_types-0.7.0-py3-none-any.whl (13 kB)
+Using cached certifi-2026.5.20-py3-none-any.whl (134 kB)
+Using cached h11-0.16.0-py3-none-any.whl (37 kB)
+Using cached jsonpointer-3.1.1-py3-none-any.whl (7.7 kB)
+Using cached pyyaml-6.0.3-cp313-cp313-win_amd64.whl (154 kB)
+Using cached typing_extensions-4.15.0-py3-none-any.whl (44 kB)
+Using cached typing_inspection-0.4.2-py3-none-any.whl (14 kB)
+Using cached anyio-4.13.0-py3-none-any.whl (114 kB)
+Installing collected packages: zstandard, urllib3, typing-extensions, tenacity, PyYAML, packaging, orjson, jsonpointer, idna, h11, charset_normalizer, certifi, annotated-types, typing-inspection, requests, pydantic-core, jsonpatch, httpcore, anyio, requests-toolbelt, pydantic, httpx, langsmith, langchain-core
+  Attempting uninstall: zstandard
+    Found existing installation: zstandard 0.23.0
+    Uninstalling zstandard-0.23.0:
+      Successfully uninstalled zstandard-0.23.0
+  Attempting uninstall: urllib3
+    Found existing installation: urllib3 2.7.0
+    Uninstalling urllib3-2.7.0:
+      Successfully uninstalled urllib3-2.7.0
+  Attempting uninstall: typing-extensions
+    Found existing installation: typing_extensions 4.15.0
+    Uninstalling typing_extensions-4.15.0:
+      Successfully uninstalled typing_extensions-4.15.0
+  Attempting uninstall: tenacity
+    Found existing installation: tenacity 9.1.4
+    Uninstalling tenacity-9.1.4:
+      Successfully uninstalled tenacity-9.1.4
+  Attempting uninstall: PyYAML
+    Found existing installation: PyYAML 6.0.3
+    Uninstalling PyYAML-6.0.3:
+      Successfully uninstalled PyYAML-6.0.3
+  Attempting uninstall: packaging
+    Found existing installation: packaging 25.0
+    Uninstalling packaging-25.0:
+      Successfully uninstalled packaging-25.0
+  Attempting uninstall: orjson
+    Found existing installation: orjson 3.11.9
+    Uninstalling orjson-3.11.9:
+      Successfully uninstalled orjson-3.11.9
+  Attempting uninstall: jsonpointer
+    Found existing installation: jsonpointer 3.1.1
+    Uninstalling jsonpointer-3.1.1:
+      Successfully uninstalled jsonpointer-3.1.1
+  Attempting uninstall: idna
+    Found existing installation: idna 3.16
+    Uninstalling idna-3.16:
+      Successfully uninstalled idna-3.16
+  Attempting uninstall: h11
+    Found existing installation: h11 0.16.0
+    Uninstalling h11-0.16.0:
+      Successfully uninstalled h11-0.16.0
+  Attempting uninstall: charset_normalizer
+    Found existing installation: charset-normalizer 3.4.7
+    Uninstalling charset-normalizer-3.4.7:
+      Successfully uninstalled charset-normalizer-3.4.7
+  Attempting uninstall: certifi
+    Found existing installation: certifi 2026.5.20
+    Uninstalling certifi-2026.5.20:
+      Successfully uninstalled certifi-2026.5.20
+  Attempting uninstall: annotated-types
+    Found existing installation: annotated-types 0.7.0
+    Uninstalling annotated-types-0.7.0:
+      Successfully uninstalled annotated-types-0.7.0
+  Attempting uninstall: typing-inspection
+    Found existing installation: typing-inspection 0.4.2
+    Uninstalling typing-inspection-0.4.2:
+      Successfully uninstalled typing-inspection-0.4.2
+  Attempting uninstall: requests
+    Found existing installation: requests 2.34.2
+    Uninstalling requests-2.34.2:
+      Successfully uninstalled requests-2.34.2
+  Attempting uninstall: pydantic-core
+    Found existing installation: pydantic_core 2.23.2
+    Uninstalling pydantic_core-2.23.2:
+      Successfully uninstalled pydantic_core-2.23.2
+  Attempting uninstall: jsonpatch
+    Found existing installation: jsonpatch 1.33
+    Uninstalling jsonpatch-1.33:
+      Successfully uninstalled jsonpatch-1.33
+  Attempting uninstall: httpcore
+    Found existing installation: httpcore 1.0.9
+    Uninstalling httpcore-1.0.9:
+      Successfully uninstalled httpcore-1.0.9
+  Attempting uninstall: anyio
+    Found existing installation: anyio 4.13.0
+    Uninstalling anyio-4.13.0:
+      Successfully uninstalled anyio-4.13.0
+  Attempting uninstall: requests-toolbelt
+    Found existing installation: requests-toolbelt 1.0.0
+    Uninstalling requests-toolbelt-1.0.0:
+      Successfully uninstalled requests-toolbelt-1.0.0
+  Attempting uninstall: pydantic
+    Found existing installation: pydantic 2.9.0
+    Uninstalling pydantic-2.9.0:
+      Successfully uninstalled pydantic-2.9.0
+  Attempting uninstall: httpx
+    Found existing installation: httpx 0.28.1
+    Uninstalling httpx-0.28.1:
+      Successfully uninstalled httpx-0.28.1
+  Attempting uninstall: langsmith
+    Found existing installation: langsmith 0.3.45
+    Uninstalling langsmith-0.3.45:
+      Successfully uninstalled langsmith-0.3.45
+  Attempting uninstall: langchain-core
+    Found existing installation: langchain-core 1.4.0
+    Uninstalling langchain-core-1.4.0:
+      Successfully uninstalled langchain-core-1.4.0
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+langchain-community 0.3.24 requires langchain-core<1.0.0,>=0.3.59, but you have langchain-core 0.3.58 which is incompatible.
+langchain-google-genai 4.2.3 requires langchain-core<2.0.0,>=1.3.2, but you have langchain-core 0.3.58 which is incompatible.
+langchain-text-splitters 0.3.11 requires langchain-core<2.0.0,>=0.3.75, but you have langchain-core 0.3.58 which is incompatible.
+Successfully installed PyYAML-6.0.3 annotated-types-0.7.0 anyio-4.13.0 certifi-2026.5.20 charset_normalizer-3.4.7 h11-0.16.0 httpcore-1.0.9 httpx-0.28.1 idna-3.17 jsonpatch-1.33 jsonpointer-3.1.1 langchain-core-0.3.58 langsmith-0.3.45 orjson-3.11.9 packaging-24.2 pydantic-2.13.4 pydantic-core-2.46.4 requests-2.34.2 requests-toolbelt-1.0.0 tenacity-9.1.4 typing-extensions-4.15.0 typing-inspection-0.4.2 urllib3-2.7.0 zstandard-0.23.0
+
+[notice] A new release of pip is available: 25.1.1 -> 26.1.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+(venv) PS R:\Projects\rag_chatbot> pip install langchain-core>=1.0.0 langchain-community langchain langchain-google-genai --upgrade -q
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+langchain-openai 0.2.14 requires langchain-core<0.4.0,>=0.3.27, but you have langchain-core 1.4.0 which is incompatible.
+
+
+[notice] To update, run: python.exe -m pip install --upgrade pip
+(venv) PS R:\Projects\rag_chatbot> python backend\retriever.py
+Traceback (most recent call last):
+  File "R:\Projects\rag_chatbot\backend\retriever.py", line 22, in <module>
+    from ingester import DocumentIngester
+  File "R:\Projects\rag_chatbot\backend\ingester.py", line 23, in <module>
+    from langchain.text_splitter import RecursiveCharacterTextSplitter
+ModuleNotFoundError: No module named 'langchain.text_splitter'
+
+(venv) PS R:\Projects\rag_chatbot> deactivate
+>> Remove-Item -Recurse -Force venv
+PS R:\Projects\rag_chatbot> python -m venv venv
+PS R:\Projects\rag_chatbot> venv\Scripts\activate
+(venv) PS R:\Projects\rag_chatbot> pip install -r requirements.txt -q
+
+[notice] A new release of pip is available: 25.1.1 -> 26.1.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+
+
+(venv) PS R:\Projects\rag_chatbot> python backend\retriever.py
+
+Ingesting: data/sample_docs
+----------------------------------------
+  Loaded : company_handbook.pdf  (2 page(s))
+  Total raw documents : 2
+  Chunks created : 6
+  chunk_size     : 1000 chars
+  chunk_overlap  : 200 chars
+----------------------------------------
+Loading FAISS index from: faiss_index/
+Index loaded successfully.
+
+=======================================================
+HYBRID RETRIEVAL — COMPARISON TEST
+=======================================================
+
+Query: 'What are the password requirements?'
+───────────────────────────────────────────────────────
+
+  BM25  (keyword):
+    1. [p.0] same password across multiple systems. If you suspect your account has been compromised, report it i...
+    2. [p.0] 4 involve shadowing senior team members, product training, and completing mandatory compliance modul...
+
+  FAISS (semantic):
+    1. [p.0] same password across multiple systems. If you suspect your account has been compromised, report it i...
+    2. [p.1] SLA, and custom onboarding. A 14-day free trial is available for all tiers with no credit card requi...
+
+  Hybrid (RRF merged):
+    1. [p.0] same password across multiple systems. If you suspect your account has been compromised, report it i...
+    2. [p.1] SLA, and custom onboarding. A 14-day free trial is available for all tiers with no credit card requi...
+
+
+Query: 'How do I get a refund?'
+───────────────────────────────────────────────────────
+
+  BM25  (keyword):
+    1. [p.0] TechCorp Employee Handbook Version 3.2  |  HR Department  |  2024 1. Refund and Return Policy Custom...
+    2. [p.1] SLA, and custom onboarding. A 14-day free trial is available for all tiers with no credit card requi...
+
+  FAISS (semantic):
+    1. [p.0] TechCorp Employee Handbook Version 3.2  |  HR Department  |  2024 1. Refund and Return Policy Custom...
+    2. [p.1] SLA, and custom onboarding. A 14-day free trial is available for all tiers with no credit card requi...
+
+  Hybrid (RRF merged):
+    1. [p.0] TechCorp Employee Handbook Version 3.2  |  HR Department  |  2024 1. Refund and Return Policy Custom...
+    2. [p.1] SLA, and custom onboarding. A 14-day free trial is available for all tiers with no credit card requi...
+
+
+Query: 'What is the parental leave policy?'
+───────────────────────────────────────────────────────
+
+  BM25  (keyword):
+    1. [p.0] same password across multiple systems. If you suspect your account has been compromised, report it i...
+    2. [p.1] separately at 10 days per year and does not require prior approval for absences of 3 days or fewer....
+
+  FAISS (semantic):
+    1. [p.1] separately at 10 days per year and does not require prior approval for absences of 3 days or fewer....
+    2. [p.0] Standard working hours are Monday to Friday, 9:00 AM to 6:00 PM in your local time zone. A one-hour...
+
+  Hybrid (RRF merged):
+    1. [p.1] separately at 10 days per year and does not require prior approval for absences of 3 days or fewer....
+    2. [p.0] Standard working hours are Monday to Friday, 9:00 AM to 6:00 PM in your local time zone. A one-hour...
+
+=======================================================
+Hybrid retriever working.
+  Algorithm    : Reciprocal Rank Fusion (custom)
+  Dense weight : 0.6  (FAISS + MMR semantic)
+  BM25  weight : 0.4  (keyword matching)
+  Top-K        : 3 results per query
+=======================================================
+
+Phase 4 complete. Ready for Phase 5.
+
+
+(venv) PS R:\Projects\rag_chatbot> python backend\rag_chain.py
+
+Ingesting: data/sample_docs
+----------------------------------------
+  Loaded : company_handbook.pdf  (2 page(s))
+  Total raw documents : 2
+  Chunks created : 6
+  chunk_size     : 1000 chars
+  chunk_overlap  : 200 chars
+----------------------------------------
+Loading FAISS index from: faiss_index/
+Index loaded successfully.
+
+=======================================================
+RAG CHAIN — AUTOMATED TEST
+(12 second delay between calls — free tier limit)
+=======================================================
+
+Test 1 — Direct question
+  Question: What is the refund policy?
+
+───────────────────────────────────────────────────────
+  Answer    :
+
+  Customers are eligible for a full refund within 30 days of purchase if 
+  the product is unused and in its original packaging. After 30 days and 
+  up to 90 days, a store credit equal to the purchase price will be 
+  issued. Digital products and software licenses are non-refundable once 
+  the activation key has been used. To initiate a return, contact 
+  support@techcorp.com with your order number. Refunds are processed 
+  within 5-7 business days and appear on the original payment method. 
+  Shipping costs are non-refundable unless the return is due to a defect 
+  or error on TechCorp's part [Source 1: company_handbook.pdf, Page 1]. 
+
+  Sources   :
+    • company_handbook.pdf  (Page 1)
+    • company_handbook.pdf  (Page 2)
+  Chunks    : 3 retrieved
+
+Test 2 — Different topic
+  Question: How many days of annual leave do employees get?
+
+───────────────────────────────────────────────────────
+  Answer    :
+
+  Employees receive 10 days of leave per year. [Source 1: 
+  company_handbook.pdf, Page 2] 
+
+  Sources   :
+    • company_handbook.pdf  (Page 2)
+    • company_handbook.pdf  (Page 1)
+  Chunks    : 3 retrieved
+
+Test 3 — Follow-up (tests memory + condensation)
+  Question: Can unused leave be carried forward?
+
+───────────────────────────────────────────────────────
+  Condensed : Can unused annual leave be carried forward to the next year?
+  Answer    :
+
+  Yes, unused leave of up to 10 days may be carried forward to the next 
+  calendar year. (Source 1: company_handbook.pdf, Page 1) 
+
+  Sources   :
+    • company_handbook.pdf  (Page 1)
+    • company_handbook.pdf  (Page 2)
+  Chunks    : 3 retrieved
+
+Test 4 — Out of scope (tests hallucination prevention)
+  Question: What is the capital of France?
+
+───────────────────────────────────────────────────────
+  Answer    :
+
+  I don't have that information in the provided documents. 
+
+  Sources   :
+    • company_handbook.pdf  (Page 1)
+    • company_handbook.pdf  (Page 2)
+  Chunks    : 3 retrieved
+
+=======================================================
+Phase 5 complete. All 4 tests passed.
+=======================================================
+(venv) PS R:\Projects\rag_chatbot> python backend\chat_cli.py
+
+=======================================================
+  RAG Chatbot — TechCorp Knowledge Base
+  Powered by Gemini 2.5 Flash + FAISS + BM25
+=======================================================
+  Type your question and press Enter.
+  Commands: 'clear' | 'quit' | 'help'
+=======================================================
+
+  Loading knowledge base...
+
+Ingesting: data/sample_docs
+----------------------------------------
+  Loaded : company_handbook.pdf  (2 page(s))
+  Total raw documents : 2
+  Chunks created : 6
+  chunk_size     : 1000 chars
+  chunk_overlap  : 200 chars
+----------------------------------------
+Loading FAISS index from: faiss_index/
+Index loaded successfully.
+  Knowledge base ready. Ask your first question!
+
+  Note: 12 second delay between answers (free API tier)
+
+  You: What is the refund policy?
+  Thinking...
+  Bot: Customers are eligible for a full refund within 30 days of purchase if the product is unused and in its original packaging. After 30 days and up to 90 days, a store credit equal to the purchase price will be issued. Digital products and software licenses are non-refundable once the activation key has been used. To initiate a return, contact support@techcorp.com with your order number. Refunds are processed within 5-7 business days and appear on the original payment method. Shipping costs are non-refundable unless the return is due to a defect or error on TechCorp's part [Source 1: company_handbook.pdf, Page 1].
+
+  Sources:
+    • company_handbook.pdf  (Page 1)
+    • company_handbook.pdf  (Page 2)
+
+  You: How long does the refund take?
+  Thinking...
+  Bot: Refunds are processed within 5-7 business days. [Source 1: company_handbook.pdf, Page 1]
+
+  Sources:
+    • company_handbook.pdf  (Page 1)
+    • company_handbook.pdf  (Page 2)
+  [Condensed to: According to the refund policy, how long does it take for a refund to be processed and appear on the original payment method?]
+
+  You: What are the working hours?
+  Thinking...
+  Bot: Standard working hours are Monday to Friday, 9:00 AM to 6:00 PM in your local time zone, with a one-hour lunch break provided between 12:00 PM and 2:00 PM at the employee's discretion. Flexible work arrangements are available with manager approval, subject to a mandatory core hours window of 10:00 AM to 3:00 PM. [Source 1: company_handbook.pdf, Page 1], [Source 2: company_handbook.pdf, Page 1]
+
+  Sources:
+    • company_handbook.pdf  (Page 1)
+    • company_handbook.pdf  (Page 2)
+  [Condensed to: What are TechCorp's working hours?]
+
+  You: quit
+
+  Goodbye!
+
+(venv) PS R:\Projects\rag_chatbot> 
+
+
+New terminal
+PS R:\Projects> cd "R:\Projects\rag_chatbot"
+PS R:\Projects\rag_chatbot> venv\Scripts\activate       
+(venv) PS R:\Projects\rag_chatbot> uvicorn backend.server:app --reload --port 8000
+INFO:     Will watch for changes in these directories: ['R:\\Projects\\rag_chatbot']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [12460] using WatchFiles
+INFO:     Started server process [4932]
+INFO:     Waiting for application startup.
+
+Ingesting: data/sample_docs
+----------------------------------------
+  Loaded : company_handbook.pdf  (2 page(s))
+  Total raw documents : 2
+  Chunks created : 6
+  chunk_size     : 1000 chars
+  chunk_overlap  : 200 chars
+----------------------------------------
+Loading FAISS index from: faiss_index/
+Index loaded successfully.
+RAG pipeline loaded. 6 chunks ready.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:59151 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59151 - "GET /openapi.json HTTP/1.1" 200 OK
