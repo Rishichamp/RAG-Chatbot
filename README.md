@@ -94,9 +94,26 @@ Then open http://localhost:8000/docs for interactive API docs.
 |--------|----------|-------------|
 | GET | `/` | Health check |
 | GET | `/status` | Index and document info |
-| POST | `/chat` | Ask a question |
-| POST | `/upload` | Upload new document |
-| DELETE | `/memory` | Clear conversation history |
+| POST | `/chat` | Ask a question: `{"question": "...", "session_id": "..."}` |
+| POST | `/upload` | Upload a PDF/TXT document |
+| DELETE | `/memory?session_id=...` | Clear one conversation's history |
+
+Each conversation has its own memory: the first `/chat` reply includes a
+`session_id`; send it back with follow-up questions. Without it a new
+conversation starts, so visitors never see each other's history.
+
+Uploads never overwrite an existing document, and PDFs/TXTs are checked
+before indexing. On a public deployment set `UPLOAD_TOKEN` in `.env`; uploads
+then need the header `X-Upload-Token: <token>`.
+
+## Tests
+
+```bash
+pip install pytest httpx
+python -m pytest -q tests
+```
+
+The tests replace the Gemini pipeline with fakes, so no API key is needed.
 
 ## Project Structure
 rag_chatbot/

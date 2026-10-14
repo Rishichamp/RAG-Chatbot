@@ -1,9 +1,13 @@
+import importlib
 import os
 import sys
 import warnings
 warnings.filterwarnings("ignore")
 from dotenv import load_dotenv
 load_dotenv()
+# ✓/✗ can't be printed by a Windows console using cp1252
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 PASS = "✓"
 FAIL = "✗"
 errors = []
@@ -11,18 +15,21 @@ api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
     errors.append("GOOGLE_API_KEY not set in .env file")
 checks = [
-    ("LangChain",               "from langchain.text_splitter import RecursiveCharacterTextSplitter"),
-    ("LangChain Google GenAI",  "from langchain_google_genai import ChatGoogleGenerativeAI"),
-    ("FAISS",                   "import faiss"),
-    ("BM25",                    "from rank_bm25 import BM25Okapi"),
-    ("PyPDF",                   "import pypdf"),
-    ("FastAPI",                 "import fastapi"),
-    ("python-dotenv",           "import dotenv"),
+    # (the old check imported the `langchain` package, which this project
+    # doesn't install, so it always reported "MISSING")
+    ("LangChain text splitters", "langchain_text_splitters"),
+    ("LangChain Community",     "langchain_community"),
+    ("LangChain Google GenAI",  "langchain_google_genai"),
+    ("FAISS",                   "faiss"),
+    ("BM25",                    "rank_bm25"),
+    ("PyPDF",                   "pypdf"),
+    ("FastAPI",                 "fastapi"),
+    ("python-dotenv",           "dotenv"),
 ]
 print("\nRAG Chatbot — Environment Check\n" + "-" * 34)
 for name, imp in checks:
     try:
-        exec(imp)
+        importlib.import_module(imp)
         print(f"  {PASS}  {name}")
     except ImportError:
         print(f"  {FAIL}  {name}  [MISSING]")

@@ -138,12 +138,12 @@ class RAGChain:
             temperature=0.1,
         )
 
-    def _condense_question(self, question: str) -> str:
+    def _condense_question(self, question: str, memory: "ConversationMemory") -> str:
         """Rewrites follow-up questions into standalone questions."""
-        if self.memory.is_empty():
+        if memory.is_empty():
             return question
         prompt = CONDENSE_PROMPT.format(
-            history=self.memory.format_history(),
+            history=memory.format_history(),
             question=question,
         )
         return call_llm_safe(self.llm, prompt)
@@ -176,11 +176,17 @@ class RAGChain:
                 })
         return sources
 
-    def ask(self, question: str) -> Dict:
-        """Full RAG pipeline for one question."""
+    def ask(self, question: str, memory: "ConversationMemory | None" = None) -> Dict:
+        """Full RAG pipeline for one question.
+
+        `memory` is the conversation to continue; the server passes one per
+        client session so visitors don't see each other's history. Without
+        it the chain's own memory is used (the CLI's single conversation).
+        """
+        memory = memory if memory is not None else self.memory
 
         # 1. Condense follow-up into standalone question
-        standalone = self._condense_question(question)
+        standalone = self._condense_question(question, memory)
 
         # 2. Hybrid retrieval
         docs = hybrid_search(
@@ -206,7 +212,7 @@ class RAGChain:
         sources = self._extract_sources(docs)
 
         # 7. Save to memory
-        self.memory.add(question, answer)
+        memory.add(question, answer)
 
         return {
             "question":    question,
