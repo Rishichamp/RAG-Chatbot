@@ -16,7 +16,6 @@ Run with:
 
 import os
 import sys
-import shutil
 import warnings
 warnings.filterwarnings("ignore")
 
@@ -58,6 +57,7 @@ app.add_middleware(
 
 DATA_DIR   = "data/sample_docs"
 INDEX_DIR  = "faiss_index"
+MAX_UPLOAD_BYTES = 25 * 1024 * 1024
 chain: Optional[RAGChain] = None
 
 
@@ -161,15 +161,22 @@ async def upload_document(file: UploadFile = File(...)):
     Upload a PDF or TXT document.
     The pipeline rebuilds the index automatically after upload.
     """
-    allowed = {".pdf", ".txt", ".docx"}
-    suffix  = Path(file.filename).suffix.lower()
+    allowed = {".pdf", ".txt"}
+    # Keep only the base name: a filename like "../../x.pdf" would otherwise
+    # be written outside DATA_DIR.
+    name    = Path(file.filename or "").name
+    suffix  = Path(name).suffix.lower()
 
-    if suffix not in allowed:
-        raise HTTPException(400, f"Unsupported file type: {suffix}. Use PDF, TXT, or DOCX.")
+    if not name or suffix not in allowed:
+        raise HTTPException(400, f"Unsupported file type: {suffix or '(none)'}. Use PDF or TXT.")
 
-    dest = Path(DATA_DIR) / file.filename
+    contents = await file.read(MAX_UPLOAD_BYTES + 1)
+    if len(contents) > MAX_UPLOAD_BYTES:
+        raise HTTPException(413, f"File is larger than {MAX_UPLOAD_BYTES // (1024 * 1024)} MB.")
+
+    dest = Path(DATA_DIR) / name
     with open(dest, "wb") as f:
-        shutil.copyfileobj(file.file, f)
+        f.write(contents)
 
     # Rebuild pipeline with new document
     try:
@@ -186,7 +193,7 @@ async def upload_document(file: UploadFile = File(...)):
             top_k=3,
         )
         return {
-            "message":      f"Uploaded and indexed: {file.filename}",
+            "message":      f"Uploaded and indexed: {name}",
             "chunks_added": len(chunks),
         }
     except Exception as e:

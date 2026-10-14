@@ -1,0 +1,15 @@
+# Secrets — never commit
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Generated at runtime (python backend/vectorstore.py)
+faiss_index/
+
+# Local study notes
+*.docx
+Rag Chatgpt.txt
