@@ -97,13 +97,14 @@ def call_llm_safe(llm, prompt: str, delay: float = 12.0) -> str:
     time.sleep(delay)
     try:
         response = llm.invoke(prompt)
-        return response.content.strip()
+        # .text, not .content: Gemini 3 models return content as a list of parts
+        return response.text.strip()
     except Exception as e:
         if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
             print("  Rate limit hit — waiting 30 seconds...")
             time.sleep(30)
             response = llm.invoke(prompt)
-            return response.content.strip()
+            return response.text.strip()
         raise
 
 
@@ -122,7 +123,7 @@ class RAGChain:
         chunks: List[Document],
         vectorstore,
         domain: str = "the company knowledge base",
-        model: str = "gemini-2.5-flash",
+        model: str = os.getenv("GEMINI_MODEL", "gemini-3.8-flash"),
         memory_window: int = 5,
         top_k: int = 3,
     ):

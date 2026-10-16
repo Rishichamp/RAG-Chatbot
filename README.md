@@ -64,7 +64,7 @@ pip install -r requirements.txt
 ### 3. Set up API key
 Create a `.env` file in the root folder:
 GOOGLE_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-3.8-flash
 Get a free key at: https://aistudio.google.com/api-keys
 
 ### 4. Add your documents

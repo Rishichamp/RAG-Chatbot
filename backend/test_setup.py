@@ -37,9 +37,9 @@ for name, imp in checks:
 print("-" * 34)
 try:
     from langchain_google_genai import ChatGoogleGenerativeAI
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", google_api_key=api_key)
+    llm = ChatGoogleGenerativeAI(model=os.getenv("GEMINI_MODEL", "gemini-3.8-flash"), google_api_key=api_key)
     response = llm.invoke("Reply with exactly: SETUP SUCCESSFUL")
-    assert "SUCCESSFUL" in response.content
+    assert "SUCCESSFUL" in response.text
     print(f"  {PASS}  Gemini API connection")
 except Exception as e:
     msg = str(e)
