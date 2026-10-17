@@ -21,6 +21,7 @@ answers with source citations. No hallucination. No guessing.
 | Language | Python 3.13 |
 
 ## Architecture
+
 PDF Documents
 ↓
 DocumentIngester (PyPDF + chunking)
@@ -46,6 +47,7 @@ FastAPI Server (REST endpoints)
 ## Setup
 
 ### 1. Clone and create virtual environment
+
 ```bash
 git clone https://github.com/YOUR_USERNAME/rag_chatbot.git
 cd rag_chatbot
@@ -57,20 +59,24 @@ source venv/bin/activate
 ```
 
 ### 2. Install dependencies
+
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 3. Set up API key
+
 Create a `.env` file in the root folder:
 GOOGLE_API_KEY=your_gemini_api_key_here
 GEMINI_MODEL=gemini-3.8-flash
 Get a free key at: https://aistudio.google.com/api-keys
 
 ### 4. Add your documents
+
 Place PDF or TXT files in `data/sample_docs/`
 
 ### 5. Build the vector index
+
 ```bash
 python backend/vectorstore.py
 ```
@@ -78,11 +84,13 @@ python backend/vectorstore.py
 ### 6. Start chatting
 
 **Terminal chat:**
+
 ```bash
 python backend/chat_cli.py
 ```
 
 **API server:**
+
 ```bash
 uvicorn backend.server:app --reload --port 8000
 ```
@@ -116,6 +124,7 @@ python -m pytest -q tests
 The tests replace the Gemini pipeline with fakes, so no API key is needed.
 
 ## Project Structure
+
 rag_chatbot/
 ├── backend/
 │   ├── ingester.py          # PDF loading and chunking
