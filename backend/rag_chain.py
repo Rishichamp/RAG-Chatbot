@@ -84,7 +84,10 @@ class ConversationMemory:
 # LLM call with rate limit handling
 # ─────────────────────────────────────────────────────────────
 
-def call_llm_safe(llm, prompt: str, delay: float = 12.0) -> str:
+LLM_CALL_DELAY = float(os.getenv("LLM_CALL_DELAY_SECONDS", "12"))
+
+
+def call_llm_safe(llm, prompt: str, delay: float = LLM_CALL_DELAY) -> str:
     """
     Calls the LLM with automatic retry on rate limit.
 

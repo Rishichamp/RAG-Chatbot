@@ -42,7 +42,8 @@ FastAPI Server (REST endpoints)
 - **Hallucination Prevention** — LLM constrained to document context only
 - **Source Citations** — every answer cites filename and page number
 - **Incremental Indexing** — add documents without full rebuild
-- **REST API** — FastAPI server with upload, chat, and memory endpoints
+- **One document per chat** — every visitor can upload one document per chat; each chat has its own isolated index and memory
+- **Web app + REST API** — a built-in chat page served by FastAPI
 
 ## Setup
 
@@ -89,30 +90,63 @@ python backend/vectorstore.py
 python backend/chat_cli.py
 ```
 
-**API server:**
+**Web app + API server:**
 
 ```bash
 uvicorn backend.server:app --reload --port 8000
 ```
-Then open http://localhost:8000/docs for interactive API docs.
+Then open http://localhost:8000 for the chat page, or http://localhost:8000/docs
+for interactive API docs. (The web app does not need step 5: each chat
+indexes its own uploaded document.)
+
+## One document per chat (web app)
+
+Open the server's home page (`/`) in a browser:
+
+1. Click **+ New chat**.
+2. Upload **one** PDF or TXT file. The chat builds its own BM25 + FAISS index
+   for that file only.
+3. Ask questions. Answers come only from that document, with page citations.
+4. To use a different document, start a **new chat**. A chat that already has
+   a document refuses a second upload.
+
+Every visitor can do this. Each chat keeps its own document, index and
+conversation memory, separate from all other chats and visitors, and is only
+reachable by its random, unguessable chat id. Chats live in server memory:
+idle chats expire after `CHAT_TTL_MINUTES` (default 120) and everything resets
+when the server restarts.
 
 ## API Endpoints
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/` | Health check |
-| GET | `/status` | Index and document info |
-| POST | `/chat` | Ask a question: `{"question": "...", "session_id": "..."}` |
-| POST | `/upload` | Upload a PDF/TXT document |
-| DELETE | `/memory?session_id=...` | Clear one conversation's history |
+| GET | `/` | Web chat page |
+| GET | `/health` | Health check |
+| GET | `/status` | Limits and number of active chats |
+| POST | `/chats` | Start a new chat → `{"chat_id": "..."}` |
+| GET | `/chats/{chat_id}` | Chat info: document name and history |
+| POST | `/chats/{chat_id}/document` | Upload the chat's one PDF/TXT (409 if it already has one) |
+| POST | `/chats/{chat_id}/messages` | Ask: `{"question": "..."}` (409 until a document is uploaded) |
+| DELETE | `/chats/{chat_id}` | Delete a chat and its index |
 
-Each conversation has its own memory: the first `/chat` reply includes a
-`session_id`; send it back with follow-up questions. Without it a new
-conversation starts, so visitors never see each other's history.
+### Limits (environment variables)
 
-Uploads never overwrite an existing document, and PDFs/TXTs are checked
-before indexing. On a public deployment set `UPLOAD_TOKEN` in `.env`; uploads
-then need the header `X-Upload-Token: <token>`.
+| Variable | Default | Meaning |
+|----------|---------|---------|
+| `MAX_UPLOAD_MB` | 10 | Largest file accepted |
+| `MAX_CHUNKS_PER_DOCUMENT` | 200 | Longest document accepted (≈ 65 pages) |
+| `MAX_CHATS` | 100 | Chats kept at once (oldest dropped first) |
+| `CHAT_TTL_MINUTES` | 120 | Idle chats expire after this |
+| `UPLOADS_PER_HOUR_PER_IP` | 10 | Uploads per visitor address per hour |
+| `MESSAGES_PER_HOUR_PER_IP` | 60 | Questions per visitor address per hour |
+| `LLM_CALL_DELAY_SECONDS` | 12 | Pause before each Gemini call (free-tier rate limit) |
+
+## Deploy on Render (free)
+
+`render.yaml` is a Render Blueprint. In the Render dashboard: **New → Blueprint**
+→ pick this repo → enter `GOOGLE_API_KEY` when asked → **Apply**. The key lives
+only in Render's environment settings; `.env` is git-ignored and must never be
+committed.
 
 ## Tests
 
@@ -131,13 +165,15 @@ rag_chatbot/
 │   ├── vectorstore.py       # FAISS index management
 │   ├── retriever.py         # BM25 + FAISS hybrid search
 │   ├── rag_chain.py         # RAG pipeline + memory
-│   ├── server.py            # FastAPI REST server
+│   ├── server.py            # FastAPI server: one document per chat
+│   ├── static/index.html    # Web chat page
 │   ├── chat_cli.py          # Interactive terminal chat
 │   └── create_sample_pdf.py # Sample data generator
 ├── data/sample_docs/        # Your documents go here
 ├── faiss_index/             # Auto-generated vector index
 ├── .env                     # API keys (never commit)
 ├── .gitignore
+├── render.yaml            # Render deploy blueprint
 ├── requirements.txt
 └── README.md
 

@@ -98,6 +98,32 @@ class DocumentIngester:
         print(f"  chunk_overlap  : {self.chunk_overlap} chars")
         return chunks
 
+    # ── In-memory upload ──────────────────────────────────────
+    def load_bytes(self, name: str, data: bytes) -> List[Document]:
+        """
+        Reads one uploaded PDF or TXT straight from memory (nothing is
+        written to disk). Same metadata as the folder loaders:
+          {"source": name, "page": 0-based page number}
+        Pages without extractable text (e.g. scanned images) are skipped.
+        """
+        suffix = Path(name).suffix.lower()
+        if suffix == ".pdf":
+            from io import BytesIO
+            from pypdf import PdfReader
+
+            reader = PdfReader(BytesIO(data))
+            docs = []
+            for i, page in enumerate(reader.pages):
+                text = (page.extract_text() or "").strip()
+                if text:
+                    docs.append(Document(page_content=text,
+                                         metadata={"source": name, "page": i}))
+            return docs
+        if suffix == ".txt":
+            text = data.decode("utf-8").strip()
+            return [Document(page_content=text, metadata={"source": name, "page": 0})] if text else []
+        raise ValueError(f"Unsupported file type: {suffix or '(none)'}")
+
     # ── Main entry point ──────────────────────────────────────
     def load_and_split(self, dir_path: str) -> List[Document]:
         """Loads all docs from dir_path and splits into chunks."""

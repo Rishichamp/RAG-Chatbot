@@ -1,0 +1,33 @@
+# Render Blueprint — New → Blueprint → pick this repo → Apply.
+# GOOGLE_API_KEY is typed into the Render dashboard only — never commit it.
+services:
+  - type: web
+    name: rag-chatbot-rishichamp
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn backend.server:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: GEMINI_MODEL
+        value: gemini-3.8-flash
+      # Pause before each Gemini call (free tier: a few requests per minute).
+      - key: LLM_CALL_DELAY_SECONDS
+        value: "4"
+      # Limits that protect the shared API quota and the 512 MB free instance.
+      - key: MAX_UPLOAD_MB
+        value: "10"
+      - key: MAX_CHUNKS_PER_DOCUMENT
+        value: "200"
+      - key: MAX_CHATS
+        value: "100"
+      - key: CHAT_TTL_MINUTES
+        value: "120"
+      - key: UPLOADS_PER_HOUR_PER_IP
+        value: "10"
+      - key: MESSAGES_PER_HOUR_PER_IP
+        value: "60"
